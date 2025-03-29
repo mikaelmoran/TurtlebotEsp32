@@ -2,6 +2,8 @@ TurtleRobot – Complete Hardware, Calibration, and Firmware Guide
 
 This guide will help you assemble the TurtleRobot project (including connecting the motors, drivers, servo, and ESP32-C3 Mini), flash the firmware onto your ESP32, and perform the necessary calibrations via the web interface.
 
+https://buymeacoffee.com/mikaelmoran
+
 
 Part 1: Hardware Wiring
 
@@ -113,4 +115,6 @@ Repeat this test until the rotation is accurate.
 Note: Calibrating both the distance and rotation is essential for the robot to accurately reproduce your drawings.
 ![Skärmavbild 2025-03-29 kl  19 43 08](https://github.com/user-attachments/assets/56db1732-0542-47d2-b4f1-529e2aff0375)
 
+
+https://buymeacoffee.com/mikaelmoran
 
