@@ -1,9 +1,19 @@
 /****************************************************
- * TurtleRobot med:
- *   - Punkt 5: Avvisa nya kommandon om robot är upptagen
- *   - Punkt 6: Samkörning av hjul (max() av kvarvarande steg)
- *   - WiFiManager i stället för hårdkodade SSID
+ * Copyright (C) 2025 Mikael Morán
+ *
+ * Permission is granted to copy and distribute this
+ * file in its original, unaltered form for personal
+ * and non-commercial use.
+ *
+ * Modification, adaptation, or alteration of this code
+ * is strictly prohibited without explicit permission.
+ *
+ * This file is part of the TurtleRobot project.
+ *
+ * Created by Mikael Morán on 2025-03-29.
  ****************************************************/
+
+
 
  #include <Arduino.h>
  #include <WiFi.h>
@@ -15,10 +25,10 @@
  #include <ESP32Servo.h>
  #include <math.h>
  #include <PrettyOTA.h>
- #include "html.h"  // HTML-sidor definierade i html.cpp och html.h
+ #include "html.h" 
  #include <ESPmDNS.h>
  
- // ------------------------- Debug-makron -------------------------
+ 
  #ifdef DEBUG
    #define DEBUG_PRINT(x)   Serial.print(x)
    #define DEBUG_PRINTLN(x) Serial.println(x)
@@ -29,31 +39,31 @@
    #define DEBUG_PRINTF(...)
  #endif
  
- // ------------------------- FreeRTOS-includes -------------------------
+
  #include <freertos/FreeRTOS.h>
  #include <freertos/task.h>
  #include <freertos/semphr.h>
  
- // ------------------------- Globala konstanter och definitioner -------------------------
+ 
  enum RobotCommandType { PEN_UP, PEN_DOWN, SET_HEADING, FORWARD, ROTATE };
  
  struct RobotCommand {
    RobotCommandType type;
-   float value; // Vinkel (SET_HEADING / ROTATE) eller sträcka (FORWARD) i mm
+   float value; 
  };
  
  constexpr int PEN_UP_ANGLE   = 10;
  constexpr int PEN_DOWN_ANGLE = 80;
  constexpr float mmPerPixel   = 2.0f;
  
- const int motor1Pins[4] = {4, 3, 2, 1};  // Vänster motor
- const int motor2Pins[4] = {5, 6, 7, 8};  // Höger motor
- constexpr int penServoPin   = 10;         // Servo (PWM-kompatibel)
+ const int motor1Pins[4] = {4, 3, 2, 1};  
+ const int motor2Pins[4] = {5, 6, 7, 8};  
+ constexpr int penServoPin   = 10;         
  
- // Flagga för att styra om pennan automatiskt ska lyftas när roboten är klar
+
  bool autoPenUpWhenIdle = true;
  
- // ------------------------- Ring Buffer -------------------------
+
  template<typename T, size_t SIZE>
  class RingBuffer {
  private:
@@ -83,14 +93,14 @@
    inline size_t size() const { return count; }
  };
  
- // Kommandokö-storlek
- constexpr size_t COMMAND_BUFFER_SIZE = 1024;
  
- // ------------------------- Forward-deklarationer -------------------------
+ constexpr size_t COMMAND_BUFFER_SIZE = 2048;
+ 
+
  void updateWebsocketStatus();
  void setupWebServer();
  
- // ------------------------- PenServoController -------------------------
+
  class PenServoController {
  private:
    Servo penServo;
@@ -119,7 +129,7 @@
  
    inline void update() {
      if (isActive && (millis() - lastChangeTime >= servoDelay)) {
-       // Kopplar bort servo om så önskas (just nu lämnat aktivt för att undvika ytterligare störningar)
+       
        isActive = false;
        currentAngle = targetAngle;
      }
@@ -129,7 +139,7 @@
    inline bool isMoving() const { return isActive; }
  };
  
- // ------------------------- MotorController -------------------------
+
  class MotorController {
  public:
    static const int STEP_SEQUENCE_SIZE = 8;
@@ -182,7 +192,7 @@
      }
    }
  
-   // Enkel acceleration i början, kan utökas för inbromsning
+ 
    inline unsigned long computeAccelInterval(long remainingSteps, long totalSteps) {
      const unsigned long initialInterval = 5;
      const unsigned long minInterval     = 1;
@@ -232,13 +242,13 @@
    }
  };
  
- // ------------------------- Robot - Huvudlogik -------------------------
+ 
  class Robot {
  public:
    float posX;
    float posY;
-   float posTheta;       // i radianer
-   float currentHeading; // i grader
+   float posTheta;       
+   float currentHeading; 
  
    float wheelDiameter;  
    float wheelBase;      
@@ -389,14 +399,14 @@
      }
    }
  
-// "Return to Home": vänd mot (0,0), kör dit, sätt heading=0
+
 inline void enqueueGoHome() {
   penUp();
   float dx = -posX;
   float dy = -posY;
   float distance = sqrtf(dx * dx + dy * dy);
   
-  // Använd samma vinkelberäkning som övriga delar av koden
+ 
   float targetAngleDeg = atan2(dx, dy) * (180.f / M_PI);
   if (targetAngleDeg < 0.f)
     targetAngleDeg += 360.f;
@@ -410,7 +420,7 @@ inline void enqueueGoHome() {
   commandQueue.push({SET_HEADING, 0.f});
 }
  
-   // Parsar inkommande JSON och skapar kommandon – avvisar nya kommandon om roboten är upptagen
+  
    inline void parseAndQueueCommands(String&& jsonStr) {
      if (!commandQueue.empty() || execState != IDLE) {
        DEBUG_PRINTLN("Robot is currently busy, ignoring new commands!");
@@ -430,36 +440,32 @@ inline void enqueueGoHome() {
      float currentY = posY;
      bool penIsDownLocal = penDown;
    
-     // ----------------------------------------------------
-// addMoveCommand – kortaste väg, alltid framåt
-// ----------------------------------------------------
+
 auto addMoveCommand = [&](float x0, float y0, float x, float y) {
-  // 1) Beräkna hur långt (distMm) och vilken vinkel (angleDeg) segmentet ska ha
+
   float dx = x - x0;
   float dy = y - y0;
   float distPix = sqrtf(dx*dx + dy*dy);
-  float distMm  = distPix * mmPerPixel; // mmPerPixel är din globala skala
+  float distMm  = distPix * mmPerPixel; 
 
-  // 2) Beräkna “physicalAngle” i grader (0–360) där 0° = uppåt
-  float angleRad = atan2(dx, dy);   // OBS: atan2(dx, dy) om 0° är uppåt, + åt höger
+ 
+  float angleRad = atan2(dx, dy);   
   float angleDeg = angleRad * (180.f / M_PI);
-  // Se till att angleDeg ligger inom [0..360)
+
   while (angleDeg >= 360.f) angleDeg -= 360.f;
   while (angleDeg < 0.f)    angleDeg += 360.f;
 
-  // 3) Räkna ut kortaste rotation (delta) från currentHeading
+  
   float delta = angleDeg - currentHeading;
-  if (delta > 180.f)  delta -= 360.f;   // t.ex. 270° → -90°
-  if (delta < -180.f) delta += 360.f;   // t.ex. -270° → +90°
+  if (delta > 180.f)  delta -= 360.f;   
+  if (delta < -180.f) delta += 360.f;  
 
-  // 4) Lägg till kommandon i kön:
-  //    - ROTATE (delta grader)  (robotRotate hanterar plus/minus)
-  //    - FORWARD (distMm)       (alltid framåt)
+
   commandQueue.push({ROTATE, delta});
   commandQueue.push({FORWARD, distMm});
 
-  // 5) Uppdatera robotens "currentHeading" lokalt
-  currentHeading = angleDeg; // angleDeg i [0..360)
+
+  currentHeading = angleDeg; 
 };
  
      auto ensurePenUp = [&]() {
@@ -510,7 +516,7 @@ auto addMoveCommand = [&](float x0, float y0, float x, float y) {
    }
  };
  
- // ------------------------- Globala variabler och FreeRTOS-semafor -------------------------
+
  Robot robot;
  SemaphoreHandle_t commandQueueMutex;
  AsyncWebServer asyncServer(80);
@@ -518,7 +524,7 @@ auto addMoveCommand = [&](float x0, float y0, float x, float y) {
  PrettyOTA OTAUpdates;
  bool webServerStarted = false;
  
- // ------------------------- WebSocket-status -------------------------
+
  void updateWebsocketStatus() {
    static unsigned long lastWsTime = 0;
    unsigned long currentTime = millis();
@@ -540,7 +546,7 @@ auto addMoveCommand = [&](float x0, float y0, float x, float y) {
    }
  }
  
- // ------------------------- Webserver -------------------------
+ 
  void setupWebServer() {
    asyncServer.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
      request->send_P(200, "text/html", index_html_page);
@@ -720,7 +726,7 @@ auto addMoveCommand = [&](float x0, float y0, float x, float y) {
    asyncServer.begin();
  }
  
- // ------------------------- FreeRTOS Tasks -------------------------
+ 
  void robotTask(void *pvParameters) {
    (void) pvParameters;
    for (;;) {
@@ -750,7 +756,7 @@ auto addMoveCommand = [&](float x0, float y0, float x, float y) {
    }
  }
  
- // ------------------------- Setup & Loop -------------------------
+
  void setup() {
    Serial.begin(115200);
    delay(1000);
@@ -762,7 +768,7 @@ auto addMoveCommand = [&](float x0, float y0, float x, float y) {
    robot.penUp();
  
    WiFiManager wifiManager;
-   // wifiManager.resetSettings(); // Avkommentera vid behov
+   // wifiManager.resetSettings();
    wifiManager.autoConnect("TurtleRobot-AP");
  
    Serial.println("WiFi är anslutet!");
