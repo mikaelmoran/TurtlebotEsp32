@@ -12,6 +12,7 @@ Each motor is controlled via its own ULN2003 driver board.
 1 × Hobby Servo
 1 × ESP32-C3 Mini with Developer Board
 1 × O-Ring (approximately 60 mm) – Used to improve wheel traction.
+
 Jumper Wires
 Breadboard (for easy connections)
 Power Supply (5V – either via the Developer Board’s 5V pin or an external 5V source)
