@@ -91,9 +91,11 @@ Before using the robot, you must calibrate it using the two calibration function
 1. Connect to the Robot’s WiFi
 After flashing the firmware, the ESP32 will start a WiFi Access Point (e.g., TurtleRobot-AP).
 Connect your computer or mobile device to this network.
+
 2. Open the Web Interface
 Open your web browser and navigate to the robot’s web page.
 If mDNS is configured (see next section), you can use http://turtlebot.local; otherwise, use the IP address displayed by the ESP32.
+
 3. Run the Calibration Tests
 The web interface includes two calibration functions:
 a) Distance Calibration
@@ -102,9 +104,14 @@ The robot will attempt to drive 200 mm.
 Measure the actual distance driven.
 Enter the measured distance (in mm) into the provided field and click "Save Distance Calibration."
 Repeat until the calibration is accurate.
+
 b) Rotation Calibration
 Click the button (e.g., "Run Rotation Test (360°)") to perform a 360° rotation test.
 Measure the actual rotation angle achieved by the robot.
 Enter the measured angle (in degrees) into the provided field and click "Save Rotation Calibration."
 Repeat this test until the rotation is accurate.
 Note: Calibrating both the distance and rotation is essential for the robot to accurately reproduce your drawings.
+![Skärmavbild 2025-03-29 kl  19 37 17](https://github.com/user-attachments/assets/5db20f5c-f987-4166-93f0-73f62ea516b5)
+
+
+
