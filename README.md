@@ -111,7 +111,6 @@ Measure the actual rotation angle achieved by the robot.
 Enter the measured angle (in degrees) into the provided field and click "Save Rotation Calibration."
 Repeat this test until the rotation is accurate.
 Note: Calibrating both the distance and rotation is essential for the robot to accurately reproduce your drawings.
-![Skärmavbild 2025-03-29 kl  19 37 17](https://github.com/user-attachments/assets/5db20f5c-f987-4166-93f0-73f62ea516b5)
-
+![Skärmavbild 2025-03-29 kl  19 43 08](https://github.com/user-attachments/assets/56db1732-0542-47d2-b4f1-529e2aff0375)
 
 
