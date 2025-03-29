@@ -87,6 +87,9 @@ PlatformIO:
 If you work with PlatformIO in VSCode, configure your project accordingly and use the built-in flashing commands.
 
 
+.... Or.. compile it yourself  :-) 
+
+
 Part 3: Calibration via Web Interface (First Step After Flashing)
 
 Before using the robot, you must calibrate it using the two calibration functions on the web interface. This is the very first thing you should do. Follow these steps:
