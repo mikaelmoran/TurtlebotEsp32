@@ -58,36 +58,18 @@ Power: Connect the servo’s red cable to 5V.
 Ground: Connect the servo’s black cable to GND.
 Part 2: Flashing the Firmware
 
-To flash a .bin file onto your ESP32 (ESP32‑C3 Mini), it is recommended to use esptool.py. This command-line tool works on both Mac and PC.
-
-Step 1: Preparations
-Install Python:
-Ensure that Python is installed on your computer. Most systems have Python installed; if not, download it from python.org.
-Install esptool.py:
-Open your Terminal (Mac) or Command Prompt (PC) and run:
-pip install esptool
-
-Step 2: Connect Your ESP32
-Connect the ESP32 to your computer via USB.
-On Mac: The port might appear as /dev/cu.SLAB_USBtoUART (or similar).
-On PC: It will be shown as a COM port (e.g., COM3).
-
-Step 3: Flash the Firmware Using esptool.py
-Erase Flash (Optional but Recommended):
-esptool.py --port /dev/cu.SLAB_USBtoUART erase_flash
-(On PC, use --port COM3.)
-Write the Firmware (.bin file):
-esptool.py --chip esp32 --port /dev/cu.SLAB_USBtoUART --baud 115200 write_flash -z 0x1000 /path/to/your_firmware.bin
-Replace the port and file path with the ones that match your system.
-
-Alternative Methods
-Arduino IDE:
-If you develop with the Arduino IDE for ESP32, you can use the regular “Upload” function (if your project includes the .bin file) or use the “Flash Programmer” tool.
-PlatformIO:
-If you work with PlatformIO in VSCode, configure your project accordingly and use the built-in flashing commands.
 
 
-.... Or.. compile it yourself  :-) 
+
+To flash the firmware.bin file onto your ESP32 (ESP32‑C3 Mini). Download upload tool, compile it with latest Arduino IDE.
+
+Then connect to : ESP32-C3-TURTLE-AP-FLASHER 
+AP-Password : 12345678
+
+Open http://192.168.4.2
+Select the downloaded firmware file, and Upload Firmware. The device will reset with the turtle firmware on it. 
+
+
 
 
 Part 3: Calibration via Web Interface (First Step After Flashing)
