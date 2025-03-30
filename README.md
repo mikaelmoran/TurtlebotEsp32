@@ -56,11 +56,14 @@ Servo
 Signal: Connect the servo’s signal wire (yellow/orange) to GPIO 10 on the ESP32‑C3.
 Power: Connect the servo’s red cable to 5V.
 Ground: Connect the servo’s black cable to GND.
+
+
+
+
+
+
+
 Part 2: Flashing the Firmware
-
-
-
-
 To flash the firmware.bin file onto your ESP32 (ESP32‑C3 Mini). Download upload tool, compile it with latest Arduino IDE.
 
 Then connect to : ESP32-C3-TURTLE-AP-FLASHER 
