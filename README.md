@@ -13,13 +13,17 @@ Components You Need:
 1 × Hobby Servo
 1 × ESP32-C3 Mini with Developer Board
 1 × O-Ring (approximately 60 mm) – Used to improve wheel traction.
+Little super glue.
 
-Jumper Wires female-female (for easy connections)
-Power Supply (5V – either via the Developer Board’s 5V pin or an external 5V source)
-A USB Cable (for programming the ESP32) Power Connections 5V Supply:
+Jumper Wires female-female.
+Power Supply i used a Powerbank.
+A USB Cable (for programming the ESP32)
+Power Connections 5V Supply:
 Connect the 5V output from the Developer Board to the VCC pin on each ULN2003 driver board.
 Connect the servo’s red (power) cable to 5V. Ground (GND): Connect the Developer Board GND to the GND
-pins on both ULN2003 driver boards and the servo’s black cable. Ensure that all grounds are common.
+pins on both ULN2003 driver boards and the servo’s black cable. 
+
+** Ensure that all grounds are common.
 
 Assembly:
 Mount the Motors and Servo: Secure each 28BYJ-48 motor on the left and right side as per your design. 
@@ -46,7 +50,7 @@ Power: Connect the servo’s red cable to 5V. Ground: Connect the servo’s blac
 
 Part 2: Flashing the Firmware To flash the firmware.bin file onto your ESP32 (ESP32‑C3 Mini).
 
-Download flasher tool, compile it with latest Arduino IDE.
+Download flasher tool, compile it with latest Arduino IDE and flash it.
 Then connect to : ESP32-C3-TURTLE-AP-FLASHER AP-Password : 12345678
 Open http://192.168.4.2 Select the downloaded firmware file, and Upload Firmware.
 The device will reset with the turtle firmware on it.
