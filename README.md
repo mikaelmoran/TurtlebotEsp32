@@ -60,9 +60,11 @@ Connect to the Robot’s WiFi After flashing the firmware, the ESP32 will start 
 Connect your computer or mobile device to this network.
 
 Open the Web Interface Open your web browser and navigate to the robot’s web page.
-If mDNS is configured (see next section), you can use http://turtlebot.local; otherwise, use the IP address displayed by the ESP32.
+You can use http://turtlebot.local; otherwise, use the IP address displayed by the ESP32 via the serial port.
 
-Run the Calibration Tests The web interface includes two calibration functions: a) Distance Calibration Click the button (e.g., "Drive (200 mm) forward") to run a distance test.
+Run the Calibration Tests The web interface includes two calibration functions:
+
+a) Distance Calibration Click the button (e.g., "Drive (200 mm) forward") to run a distance test.
 The robot will attempt to drive 200 mm. Measure the actual distance driven.
 Enter the measured distance (in mm) into the provided field and click "Save Distance Calibration." Repeat until the calibration is accurate.
 
