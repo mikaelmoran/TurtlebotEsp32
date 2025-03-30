@@ -84,3 +84,7 @@ b) Rotation Calibration Click the button (e.g., "Run Rotation Test (360°)") to 
 
 If you like it, support me if you want, with a coffee : -) https://buymeacoffee.com/mikaelmoran
 ![Skärmavbild 2025-03-29 kl  20 53 45](https://github.com/user-attachments/assets/d4c4d2f7-8d5c-4dee-a8cb-1bc66fa5a35a)
+![IMG_0823](https://github.com/user-attachments/assets/08bcc28e-27ff-4223-a596-96def02cb8bb)
+![IMG_0821](https://github.com/user-attachments/assets/29b3ff97-bd46-411f-8745-2b96f5c80bef)
+![IMG_0819](https://github.com/user-attachments/assets/f8f78208-8720-45fa-8d9f-de358b9fdaeb)
+![IMG_0816](https://github.com/user-attachments/assets/ac6e6bc4-15e6-404f-8bda-03d8914759ff)
